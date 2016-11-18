@@ -16,6 +16,8 @@ $app->get('/', function () use ($app) {
 });
 
 $app->get('/projects/{project_id}/tasks', function($project_id) use ($app) {
+    $allTasks = \App\Models\Task::find(1);
+    // var_dump($allTasks);die;
     $project = \App\Models\Project::find($project_id);
     $tasks = \App\Models\Task::select('*')->where('project_id', $project_id)->get();
     return view('project_tasks', ['project' => $project, 'tasks' => $tasks]);
@@ -28,3 +30,4 @@ $app->post('/projects/{project_id}/tasks', function($project_id) use ($app) {
 $app->put('/projects/{project_id}/tasks/{task_id}', function($project_id, $task_id) use ($app) {
     return "updating task";
 });
+

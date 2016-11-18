@@ -3,7 +3,7 @@
 @section('content')
 
     <h1>Project: {{ $project->name }}</h1>
-    
+    <h1>Hello world</h1>
     <h2>Taks:</h2>
     
     <div class="form-group">
@@ -25,15 +25,20 @@
 
 @section('js')
 <script type="text/javascript">
-
+/* global $ */
 $('#task-button').click(function(){
     $.ajax({
         url: '/projects/1/tasks',
         method: 'POST',
-        data: {
+        data: { 
             name: ''
         }
     });
 });
+$('.complete-button').click(function(){
+    alert("task complete");
+    $(this).parent().remove();
+    // add function to remove from list
+})
 </script>
 @endsection
