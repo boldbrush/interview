@@ -17,7 +17,7 @@ $app->get('/', function () use ($app) {
 
 $app->get('/projects/{project_id}/tasks', function($project_id) use ($app) {
     $project = \App\Models\Project::find($project_id);
-    $tasks = \App\Models\Task::select('*')->where('project_id', $project_id)->get();
+    $tasks = \App\Models\Task::byProjectId;
     return view('project_tasks', ['project' => $project, 'tasks' => $tasks]);
 });
 
