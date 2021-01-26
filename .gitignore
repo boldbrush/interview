@@ -2,3 +2,4 @@
 .env
 storage
 php_errors.log
+.idea
