@@ -1,5 +1,7 @@
 <?php
 
+/** @var \Laravel\Lumen\Routing\Router $router */
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -11,20 +13,20 @@
 |
 */
 
-$app->get('/', function () use ($app) {
-    return $app->version();
+$router->get('/', function () use ($router) {
+    return $router->version();
 });
 
-$app->get('/projects/{project_id}/tasks', function($project_id) use ($app) {
+$router->get('/projects/{project_id}/tasks', function($project_id) use ($router) {
     $project = \App\Models\Project::find($project_id);
     $tasks = \App\Models\Task::select('*')->where('project_id', $project_id)->get();
     return view('project_tasks', ['project' => $project, 'tasks' => $tasks]);
 });
 
-$app->post('/projects/{project_id}/tasks', function($project_id) use ($app) {
+$router->post('/projects/{project_id}/tasks', function($project_id) use ($router) {
     return "creating new task";
 });
 
-$app->put('/projects/{project_id}/tasks/{task_id}', function($project_id, $task_id) use ($app) {
+$router->put('/projects/{project_id}/tasks/{task_id}', function($project_id, $task_id) use ($router) {
     return "updating task";
 });
