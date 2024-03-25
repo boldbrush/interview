@@ -1,56 +1,66 @@
-## BoldBrush ToDo App
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-One of our developers has moved to Timbuktu and has left unfinished a very 
-important project. You have inherited this application and is now your 
-oportunity to shine by implemeting some very important missing features.
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-The app is available in this URL: https://boldbrush-interview-app-rickycheers1.c9users.io
+## About Laravel
 
-### Backend Features Needed
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-First of all, we need to be able to filter project tasks by status 
-(completed or uncompleted) when a parameter is passed in the URL.
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-For example:
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-- `/projects/1/tasks?status=completed`
-- `/projects/1/tasks?status=uncompleted`
+## Learning Laravel
 
-If no `status` parameter is passed in the URL, then we should 
-display all the tasks associated with a given project no matter their status.
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-To achieve that, we want to refactor the code in the route controller to be
-a little more reusable. We would like to be able to write the following code in 
-order to retrieve the appropriate tasks: `Task::byProjectId($project_id, $completed)`
+You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-> Hint: Implement in the following file `app/Models/Task.php`
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-The application also needs to be able to receive POST requests in order to create
-new project taks. (`POST /projects/1/tasks name=The task name`)
+## Laravel Sponsors
 
-We also need to provide the application with a way for updating tasks.
-Specifically, we want to mark a given task as completed. (`PUT /projects/1/tasks/1 completed=true`)
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-> Hint: Implement in the following file `app\Http\routes.php`
+### Premium Partners
 
-## Front-end Features Needed
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[WebReinvent](https://webreinvent.com/)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+- **[Jump24](https://jump24.co.uk)**
+- **[Redberry](https://redberry.international/laravel/)**
+- **[Active Logic](https://activelogic.com)**
+- **[byte5](https://byte5.de)**
+- **[OP.GG](https://op.gg)**
 
-The front-end code will also need to be updated with the following features.
+## Contributing
 
-Since now we're going to be able to filter tasks by 'status', we need to show
-that in the user interface. Add some kind of label to the template to let the 
-user know about it.
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-> File: app\resources\views\project_tasks.blade.php
+## Code of Conduct
 
-The user interface has a field to create tasks, but as you may already imagine by now, 
-it doesn't do anything... (sigh) 
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-Let's write the needed JS code in order to create tasks via AJAX requests.
-It would be nice if when a user clicks on the 'Add' button, the field clears out
-and a task is automatically appended to the list of tasks.
+## Security Vulnerabilities
 
-Finally, we need to be able to complete tasks via the user interface. For that, 
-execute an AJAX call to the `PUT` endpoint every time the user clicks on the
-'complete' button of each task. When the button is clicked, the task should be
-removed from the list as well.
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
