@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# script/console: Launch a console for the application. Optionally allow an
+#                 environment to be passed in to let the script handle the
+#                 specific requirements for connecting to a console for that
+#                 environment.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+if [ -z "${LARAVEL_SAIL}" ] && [ "${ENV}" != "CI" ]; then
+  # Run within docker container using sail if not already in docker container or on build mode
+  vendor/bin/sail shell $0
+  exit $?
+fi
+
+echo "==> FYI - This REPL is only available in development mode at the moment\n"
+echo "==> to leave, type 'exit' or press Ctrl + c"
+
+php artisan tinker

@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# script/test: Run test suite for application. Optionally pass in a path to an
+#              individual test file to run a single test.
+
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+if [ -z "${LARAVEL_SAIL}" ] && [ "${ENV}" != "CI" ]; then
+  # Run within docker container using sail if not already in docker container or on build mode
+  ./vendor/bin/sail shell $0
+  exit $?
+fi
+
+if [ -n "$1" ]; then
+  # pass arguments to test call. This is useful for calling a single test.
+  php artisan test "$1"
+else
+  php artisan test
+fi

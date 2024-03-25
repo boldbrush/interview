@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# script/update: Update application to run for its current checkout.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+if [ -z "${LARAVEL_SAIL}" ] && [ "${ENV}" != "CI" ]; then
+  # Run within docker container using sail if not already in docker container or on build mode
+  ./vendor/bin/sail shell $0
+  exit $?
+fi
+
+script/bootstrap
+
+npm run build
+
+echo "==> Updating db…"
+# run all database migrations to ensure everything is up to date.
+php artisan migrate
+
+echo "TODO: integrate with db-env-manager"

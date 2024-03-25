@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# script/bootstrap: Resolve all dependencies that the application requires to run
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+if [ -z "${LARAVEL_SAIL}" ] && [ "${ENV}" != "local" ] && [ "${ENV}" != "CI" ] && [ ! -f vendor/autoload.php ]; then
+  docker run --rm \
+      -u "$(id -u):$(id -g)" \
+      -v "$(pwd):/var/www/html" \
+      -w /var/www/html \
+      laravelsail/php82-composer:latest \
+      composer install --ignore-platform-reqs
+  echo "==> This is a fresh install of the project, dependencies have been installed within the container"
+  echo "==> You have to run this command again"
+  exit 0
+fi
+
+if [ -z "${LARAVEL_SAIL}" ] && [ "${ENV}" != "CI" ]; then
+  # Run within docker container using sail if not already in docker container or on build mode
+  ./vendor/bin/sail shell $0
+  exit $?
+fi
+
+echo "==> Installing composer dependencies"
+composer install
+
+echo "==> Installing npm dependencies"
+npm install
+
+echo "==> File permissions"
+chmod -R ugo+rw storage

@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# script/server: Launch the application and any extra required processes
+#                locally.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+./vendor/bin/sail up -d
+
+# load env variables
+source ./.env
+
+cat <<EOF
+********************
+app "$APP_NAME" available at:
+
+From host:
+http://$APP_SERVICE:$APP_PORT
+
+To shut down the server run \`sail down\`
+
+EOF
+
+vendor/bin/sail npm run vite

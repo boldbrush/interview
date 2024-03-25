@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# script/setup: Set up application for the first time after cloning, or set it
+#               back to the initial first unused state.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+if [ -z "${LARAVEL_SAIL}" ] && [ ! -f vendor/autoload.php ]; then
+  docker run --rm \
+      -u "$(id -u):$(id -g)" \
+      -v "$(pwd):/var/www/html" \
+      -w /var/www/html \
+      laravelsail/php83-composer:latest \
+      composer install --ignore-platform-reqs
+  echo "==> This is a fresh install of the project, dependencies have been installed within the container"
+  echo "==> You have to run this command again"
+  exit 0
+fi
+
+if [ -z "${LARAVEL_SAIL}" ] && [ "${ENV}" != "CI" ]; then
+  # Run within docker container using sail if not already in docker container or on build mode
+  ./vendor/bin/sail up -d
+  ./vendor/bin/sail shell $0
+  exit $?
+fi
+
+script/bootstrap
+
+echo "==> Generating app key"
+php artisan key:generate --ansi
+
+echo "==> Setting up DB…"
+php artisan migrate --seed
