@@ -26,6 +26,10 @@ if [ -z "${LARAVEL_SAIL}" ] && [ "${ENV}" != "CI" ]; then
   exit $?
 fi
 
+if [ ! -f .env ]; then
+  cp .env.example .env
+fi
+
 script/bootstrap
 
 echo "==> Generating app key"
