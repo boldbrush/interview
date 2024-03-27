@@ -23,4 +23,6 @@ To shut down the server run \`sail down\`
 
 EOF
 
-vendor/bin/sail npm run vite
+# skip this process for now, as the front-end part of the app is not yet implemented
+# and there appear to be issues with npm and docker on intel macs.
+# vendor/bin/sail npm run dev
