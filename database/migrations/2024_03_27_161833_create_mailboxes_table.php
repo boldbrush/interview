@@ -21,7 +21,6 @@ return new class extends Migration
 
         Schema::create('mailboxes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id')->nullable();
             $table->string('username');
             $table->string('domain');
             $table->string('status')->nullable();

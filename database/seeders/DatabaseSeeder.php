@@ -6,8 +6,10 @@ namespace Database\Seeders;
 use App\Models\Domain;
 use App\Models\Mailbox;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Collection as ModelsCollection;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Lottery;
 
@@ -20,7 +22,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->pullMailboxes();
 
-        $domains = Mailbox::query()->select('domain')->distinct()->get();
+        $domains = Mailbox::query()->distinct()->pluck('domain');
 
         if ($domains->count() == 0) {
             throw new \Exception('No domains found to import');
@@ -52,22 +54,22 @@ class DatabaseSeeder extends Seeder
         foreach ($response['data'] as $domain) {
             foreach ($domain['boxes'] as $mailbox) {
                 // omit a percentage of mailboxes
-                Lottery::odds(chances: 8, outOf: 10)->winner(
-                    fn () => $records[] = [
-                        'domain' => $domain->domain,
-                        'username' => $mailbox->username,
-                        'status' => $mailbox->status,
+                $records[] = Lottery::odds(chances: 8, outOf: 10)->winner(
+                    fn () => [
+                        'domain' => $domain['domain'],
+                        'username' => $mailbox['username'],
+                        'status' => $mailbox['status'],
                         'quota' => null,
                         'used' => null,
-                        'created_at' => $mailbox->created_at,
-                        'updated_at' => $mailbox->updated_at,
-                        'deleted_at' => $mailbox->deleted_at,
+                        'created_at' => Date::parse($mailbox['created_at']),
+                        'updated_at' => Date::parse($mailbox['updated_at']),
+                        'deleted_at' => Date::parse($mailbox['deleted_at']),
                     ]
                 )->choose();
             }
         }
 
-        Mailbox::insert($records);
+        Mailbox::insert(array_filter($records));
 
         if ($page < $response['last_page'])
         {
@@ -75,7 +77,7 @@ class DatabaseSeeder extends Seeder
         }
     }
 
-    private function assignDomainsToUsers(Collection $domains, Collection $users): void
+    private function assignDomainsToUsers(Collection $domains, ModelsCollection $users): void
     {
         $users->each(function ($user) use (&$domains) {
             if ($domains->count() == 0) {
@@ -88,7 +90,7 @@ class DatabaseSeeder extends Seeder
             $chunk = $domains->take($domainsAssignedToUser);
 
             $chunk->each(
-                fn ($name) => $user->domains()->insert(['domain' => $name])
+                fn ($name) => $user->domains()->save(new Domain(['domain' => $name]))
             );
 
             $domains = $domains->diff($chunk);
