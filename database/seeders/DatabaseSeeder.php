@@ -38,15 +38,20 @@ class DatabaseSeeder extends Seeder
 
     private function pullMailboxes($page = 1): void
     {
+        $apiUrl = env('API_URL');
         $apiKey = env('UNRESTRICTED_API_KEY');
 
-        if (!$apiKey) {
+        if (empty($apiUrl)) {
+            throw new \Exception('API URL is missing. Please set `API_URL` in your .env file.');
+        }
+
+        if (empty($apiUrl)) {
             throw new \Exception('API key is missing. Please set `UNRESTRICTED_API_KEY` in your .env file.');
         }
 
         $response = Http::throw()
             ->withHeader('Authorization', "Bearer $apiKey")
-            ->get('https://candidate-api.boldbrush.com/domains/seed', ['page' => $page])
+            ->get("$apiUrl/domains/seed", ['page' => $page])
             ->json();
 
         $records = [];

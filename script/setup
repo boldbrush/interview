@@ -7,6 +7,10 @@ set -e
 
 cd "$(dirname "$0")/.."
 
+if [ ! -f .env ]; then
+  cp .env.example .env
+fi
+
 if [ -z "${LARAVEL_SAIL}" ] && [ ! -f vendor/autoload.php ]; then
   docker run --rm \
       -u "$(id -u):$(id -g)" \
@@ -24,10 +28,6 @@ if [ -z "${LARAVEL_SAIL}" ] && [ "${ENV}" != "CI" ]; then
   ./vendor/bin/sail up -d
   ./vendor/bin/sail shell $0
   exit $?
-fi
-
-if [ ! -f .env ]; then
-  cp .env.example .env
 fi
 
 script/bootstrap
