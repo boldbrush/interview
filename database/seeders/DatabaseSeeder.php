@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
         $records = [];
 
         foreach ($response['data'] as $domain) {
-            foreach ($domain['boxes'] as $mailbox) {
+            foreach ($domain['mailboxes'] as $mailbox) {
                 // omit a percentage of mailboxes
                 $records[] = Lottery::odds(chances: 8, outOf: 10)->winner(
                     fn () => [
@@ -76,8 +76,7 @@ class DatabaseSeeder extends Seeder
 
         Mailbox::insert(array_filter($records));
 
-        if ($page < $response['last_page'])
-        {
+        if ($page < $response['last_page']) {
             $this->pullMailboxes($page + 1);
         }
     }
